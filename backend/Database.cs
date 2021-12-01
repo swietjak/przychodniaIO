@@ -13,5 +13,6 @@ namespace Backend.Context
         }
 
         public DbSet<Clinic> Clinics { get; set; }
+        public DbSet<Specialization> Specializations { get; set; }
     }
 }
