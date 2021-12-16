@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Context;
 using Backend.Dtos;
 using Backend.Entities;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -43,6 +45,47 @@ namespace Backend.Controllers
             {
                 return StatusCode(400, "XDDD");
             }
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateSpecialization(int id, UpdateSpecializationDto entityDto){
+
+            var existingSpecialization = await _context.Specializations.FindAsync(id);
+            var isSpecializationPresent = existingSpecialization == null;
+            if (isSpecializationPresent)
+            {
+                return NotFound();
+            }
+
+            existingSpecialization.name = entityDto.name;
+            existingSpecialization.description = entityDto.description;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!isSpecializationPresent)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(201);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSpecialization(int id){
+            var existingSpecialization = await _context.Specializations.FindAsync(id);
+            var isSpecializationPresent = existingSpecialization == null;
+            if (isSpecializationPresent)
+            {
+                return NotFound();
+            }
+
+            _context.Specializations.Remove(existingSpecialization);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(201);
 
         }
     }

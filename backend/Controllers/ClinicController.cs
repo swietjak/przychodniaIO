@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Context;
 using Backend.Dtos;
 using Backend.Entities;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -55,6 +57,52 @@ namespace Backend.Controllers
 
             _context.SaveChanges();
             return StatusCode(201, clinic.id);
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateClinic(int id, UpdateClinicDto entityDto){
+
+            var existingClinic = await _context.Clinics.FindAsync(id);
+            var specialization = _context.Specializations.FirstOrDefault(x => x.id == entityDto.specialization_id);
+            var isClinicPresent = existingClinic == null;
+            if (isClinicPresent)
+            {
+                return NotFound();
+            }
+
+            existingClinic.name = entityDto.name;
+            existingClinic.address = entityDto.address;
+            existingClinic.mail = entityDto.mail;
+            existingClinic.phone = entityDto.phone;
+            existingClinic.menager_id = entityDto.menager_id;
+            existingClinic.specialization = specialization;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!isClinicPresent)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteClinic(int id){
+            var existingClinic = await _context.Clinics.FindAsync(id);
+            var isClinicPresent = existingClinic == null;
+            if (isClinicPresent)
+            {
+                return NotFound();
+            }
+
+            _context.Clinics.Remove(existingClinic);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(201);
+
         }
     }
 }
