@@ -4,6 +4,6 @@ namespace Backend.Dtos
 {
     public record CreateReceptionistDto : CreateUserDto
     {
-        public int receptionistId { get; set; }
+        public int clinicId { get; set; }
     }
 }
