@@ -3,15 +3,17 @@ using System;
 using Backend.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace backend.Migrations
 {
     [DbContext(typeof(HospitalContext))]
-    partial class HospitalContextModelSnapshot : ModelSnapshot
+    [Migration("20211215090903_relationsMigration")]
+    partial class relationsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,15 +31,15 @@ namespace backend.Migrations
                     b.Property<DateTime>("endDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("medicid")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("startDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int?>("userid")
+                        .HasColumnType("integer");
+
                     b.HasKey("id");
 
-                    b.HasIndex("medicid");
+                    b.HasIndex("userid");
 
                     b.ToTable("Availabilities");
                 });
@@ -79,126 +81,6 @@ namespace backend.Migrations
                     b.ToTable("Clinics");
                 });
 
-            modelBuilder.Entity("Backend.Entities.Medic", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<string>("PESEL")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("mail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("medicRole")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Medics");
-                });
-
-            modelBuilder.Entity("Backend.Entities.Patient", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<string>("PESEL")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("insuranceId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("mail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Patients");
-                });
-
-            modelBuilder.Entity("Backend.Entities.Receptionist", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<string>("PESEL")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("clinicid")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("mail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("clinicid");
-
-                    b.ToTable("Receptionists");
-                });
-
             modelBuilder.Entity("Backend.Entities.Specialization", b =>
                 {
                     b.Property<int>("id")
@@ -216,6 +98,48 @@ namespace backend.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Specializations");
+                });
+
+            modelBuilder.Entity("Backend.Entities.User", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PESEL")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("mail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("User");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
             modelBuilder.Entity("Backend.Entities.Visit", b =>
@@ -264,17 +188,17 @@ namespace backend.Migrations
                     b.Property<DateTime>("endDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("medicid")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("startDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("userid")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
 
                     b.HasIndex("clinicid");
 
-                    b.HasIndex("medicid");
+                    b.HasIndex("userid");
 
                     b.ToTable("WorkingTimes");
                 });
@@ -309,13 +233,43 @@ namespace backend.Migrations
                     b.ToTable("MedicSpecialization");
                 });
 
+            modelBuilder.Entity("Backend.Entities.Medic", b =>
+                {
+                    b.HasBaseType("Backend.Entities.User");
+
+                    b.HasDiscriminator().HasValue("Medic");
+                });
+
+            modelBuilder.Entity("Backend.Entities.Patient", b =>
+                {
+                    b.HasBaseType("Backend.Entities.User");
+
+                    b.Property<string>("insuranceId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("Patient");
+                });
+
+            modelBuilder.Entity("Backend.Entities.Receptionist", b =>
+                {
+                    b.HasBaseType("Backend.Entities.User");
+
+                    b.Property<int?>("clinicid")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("clinicid");
+
+                    b.HasDiscriminator().HasValue("Receptionist");
+                });
+
             modelBuilder.Entity("Backend.Entities.Availability", b =>
                 {
-                    b.HasOne("Backend.Entities.Medic", "medic")
+                    b.HasOne("Backend.Entities.User", "user")
                         .WithMany()
-                        .HasForeignKey("medicid");
+                        .HasForeignKey("userid");
 
-                    b.Navigation("medic");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Backend.Entities.Clinic", b =>
@@ -325,15 +279,6 @@ namespace backend.Migrations
                         .HasForeignKey("specializationid");
 
                     b.Navigation("specialization");
-                });
-
-            modelBuilder.Entity("Backend.Entities.Receptionist", b =>
-                {
-                    b.HasOne("Backend.Entities.Clinic", "clinic")
-                        .WithMany()
-                        .HasForeignKey("clinicid");
-
-                    b.Navigation("clinic");
                 });
 
             modelBuilder.Entity("Backend.Entities.Visit", b =>
@@ -363,13 +308,13 @@ namespace backend.Migrations
                         .WithMany()
                         .HasForeignKey("clinicid");
 
-                    b.HasOne("Backend.Entities.Medic", "medic")
+                    b.HasOne("Backend.Entities.User", "user")
                         .WithMany()
-                        .HasForeignKey("medicid");
+                        .HasForeignKey("userid");
 
                     b.Navigation("clinic");
 
-                    b.Navigation("medic");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("ClinicMedic", b =>
@@ -400,6 +345,15 @@ namespace backend.Migrations
                         .HasForeignKey("specializationsid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Entities.Receptionist", b =>
+                {
+                    b.HasOne("Backend.Entities.Clinic", "clinic")
+                        .WithMany()
+                        .HasForeignKey("clinicid");
+
+                    b.Navigation("clinic");
                 });
 #pragma warning restore 612, 618
         }

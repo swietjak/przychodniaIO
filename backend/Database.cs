@@ -13,7 +13,12 @@ namespace Backend.Context
         }
 
         public DbSet<Clinic> Clinics { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<Medic> Medics { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Receptionist> Receptionists { get; set; }
+        public DbSet<Visit> Visits { get; set; }
+        public DbSet<WorkingTime> WorkingTimes { get; set; }
+        public DbSet<Availability> Availabilities { get; set; }
     }
 }
