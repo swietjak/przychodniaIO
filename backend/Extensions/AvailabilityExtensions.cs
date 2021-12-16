@@ -7,14 +7,14 @@ namespace Backend.Extensions
 {
     public static class AvailabilityExtensions
     {
-        public static GetAvailabilityDto AsGetAvailabilityDto(this Availability item, int medicId)
+        public static GetAvailabilityDto AsGetAvailabilityDto(this Availability item, GetEntityDto medic)
         {
             return new GetAvailabilityDto
             {
                 id = item.id,
                 startDate = item.startDate,
                 endDate = item.endDate,
-                medicId = medicId
+                medic = medic
             };
         }
 

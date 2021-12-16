@@ -8,6 +8,6 @@ namespace Backend.Dtos
         public int id { get; init; }
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
-        public int medicId { get; set; }
+        public  GetEntityDto medic { get; set; }
     }
 }

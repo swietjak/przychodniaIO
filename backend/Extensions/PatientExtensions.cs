@@ -7,7 +7,7 @@ namespace Backend.Extensions
 {
     public static class PatientExtensions
     {
-        public static Patient AsPatient(this CreatePatientDto item, List<Specialization> specializations, List<Clinic> clinics)
+        public static Patient AsPatient(this CreatePatientDto item)
         {
             return new Patient
             {
