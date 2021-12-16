@@ -86,7 +86,7 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return StatusCode(201);
         }
 
         [HttpDelete("{id}")]

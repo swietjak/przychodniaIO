@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Context;
 using Backend.Dtos;
 using Backend.Entities;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -35,6 +37,49 @@ namespace Backend.Controllers
             _context.SaveChanges();
 
             return StatusCode(201, value);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateMedic(int id, UpdateMedicDto value){
+
+            var existingMedic = await _context.Medics.FindAsync(id);
+            var specializationsList = _context.Specializations.Where(specialization => value.specialization_ids.Any(id => id == specialization.id)).ToList();
+            var clinicsList = _context.Clinics.Where(clinic => value.clinic_ids.Any(id => id == clinic.id)).ToList();
+            var isMedicPresent = existingMedic == null;
+            if (isMedicPresent)
+            {
+                return NotFound();
+            }
+
+            existingMedic.medicRole = (MedicRole)System.Enum.Parse(typeof(MedicRole),value.role);
+            existingMedic.specializations = specializationsList;
+            existingMedic.clinics = clinicsList;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!isMedicPresent)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(201);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMedic(int id){
+            var existingMedic = await _context.Medics.FindAsync(id);
+            var isMedicPresent = existingMedic == null;
+            if (isMedicPresent)
+            {
+                return NotFound();
+            }
+
+            _context.Medics.Remove(existingMedic);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(201);
         }
     }
 }
