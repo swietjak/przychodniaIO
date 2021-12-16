@@ -32,9 +32,17 @@ namespace Backend.Controllers
             var clinicsList = _context.Clinics.Where(clinic => value.clinic_ids.Any(id => id == clinic.id)).ToList();
 
             _context.Medics.Add(value.AsMedic(specializationsList, clinicsList));
-            _context.SaveChanges();
+            
 
-            return StatusCode(201, value);
+            try 
+            {
+                _context.SaveChanges();
+                return StatusCode(201, value);
+             }
+             catch
+            {
+                return StatusCode(400, "Failed");
+            }
         }
     }
 }

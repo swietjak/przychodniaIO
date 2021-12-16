@@ -55,8 +55,16 @@ namespace Backend.Controllers
             Clinic clinic = value.AsClinic(specialization);
             _context.Clinics.Add(clinic);
 
-            _context.SaveChanges();
-            return StatusCode(201, clinic.id);
+           
+            try 
+            {
+                _context.SaveChanges();
+                return StatusCode(201, clinic.id);
+            }
+          catch
+            {
+              return StatusCode(400, "Failed");
+            }
         }
         
         [HttpPut("{id}")]
