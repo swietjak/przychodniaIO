@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Backend.Dtos;
 using Backend.Entities;
+using System.Linq;
 
-namespace Backend
+namespace Backend.Extensions
 {
-    public static class Extensions
+    public static class SpecializationsExtensions
     {
         public static GetClinicDto AsGetClinicDto(this Clinic item)
         {
@@ -24,6 +26,8 @@ namespace Backend
             };
         }
 
+
+
         public static GetSpecializationDto AsGetSpecializationDto(this Specialization item)
         {
             return new GetSpecializationDto
@@ -34,17 +38,24 @@ namespace Backend
             };
         }
 
-        public static Clinic AsClinic(this CreateClinicDto item, Specialization specialization)
+        public static GetEntityDto AsGetEntityDto(this Specialization item)
         {
-            return new Clinic
+            return new GetEntityDto
+            {
+                id = item.id,
+                name = item.name,
+            };
+        }
+
+
+
+        public static Specialization AsSpecialization(this CreateSpecializationDto item)
+        {
+            return new Specialization
             {
                 id = 0,
                 name = item.name,
-                address = item.address,
-                mail = item.mail,
-                menager_id = item.menager_id,
-                phone = item.phone,
-                specialization = specialization
+                description = item.description
             };
         }
     }

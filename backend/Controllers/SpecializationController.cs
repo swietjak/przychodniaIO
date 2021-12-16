@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Backend.Context;
+using Backend.Dtos;
 using Backend.Entities;
+using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -17,21 +19,21 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Specialization> Get()
+        public IEnumerable<GetSpecializationDto> Get()
         {
-            return _context.Specializations.ToList();
+            return _context.Specializations.Select(specialization => specialization.AsGetSpecializationDto()).ToList();
         }
 
         [HttpGet("{id}")]
-        public Specialization Get(int id)
+        public GetSpecializationDto Get(int id)
         {
-            return _context.Specializations.FirstOrDefault(x => x.id == id);
+            return _context.Specializations.FirstOrDefault(x => x.id == id).AsGetSpecializationDto();
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Specialization value)
+        public IActionResult Post([FromBody] CreateSpecializationDto value)
         {
-            _context.Specializations.Add(value);
+            _context.Specializations.Add(value.AsSpecialization());
             try
             {
                 _context.SaveChanges();

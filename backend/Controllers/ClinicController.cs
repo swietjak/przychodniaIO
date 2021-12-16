@@ -3,6 +3,7 @@ using System.Linq;
 using Backend.Context;
 using Backend.Dtos;
 using Backend.Entities;
+using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -23,16 +24,8 @@ namespace Backend.Controllers
             try
             {
                 System.Console.WriteLine(_context.Clinics.ToList());
-                var list = _context.Clinics.Join(_context.Specializations, clinic => clinic.specialization.id, specialization => specialization.id, (clinic, specialization) => new GetClinicDto
-                {
-                    specialization = specialization.AsGetSpecializationDto(),
-                    address = clinic.address,
-                    id = clinic.id,
-                    mail = clinic.mail,
-                    menager_id = clinic.menager_id,
-                    name = clinic.name,
-                    phone = clinic.phone
-                }).ToList();
+                var list = _context.Clinics.Join(_context.Specializations, clinic => clinic.specialization.id, specialization => specialization.id, (clinic, specialization) => clinic.AsGetClinicDto(specialization)
+                ).ToList();
                 System.Console.WriteLine(list);
 
                 return list;

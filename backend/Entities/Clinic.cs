@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Entities
@@ -19,5 +20,6 @@ namespace Backend.Entities
         public string menager_id { get; set; }
         [Required]
         public Specialization specialization { get; set; }
+        public ICollection<Medic> medics { get; set; }
     }
 }

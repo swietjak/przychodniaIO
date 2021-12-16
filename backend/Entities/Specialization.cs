@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Backend.Entities
 {
@@ -9,5 +10,6 @@ namespace Backend.Entities
         [Required]
         public string name { get; set; }
         public string description { get; set; }
+        public ICollection<Medic> medics { get; set; }
     }
 }
