@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Context;
 using Backend.Dtos;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -66,6 +68,48 @@ namespace Backend.Controllers
             {
                 return StatusCode(400, "Error");
             }
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateVisit(int id, UpdateVisitDto entityDto){
+
+            var existingVisit = await _context.Visits.FindAsync(id);
+            var workinTime = _context.WorkingTimes.FirstOrDefault(x => x.id == entityDto.workingTimeId);
+            var isVisitPresent = existingVisit == null;
+            if (isVisitPresent)
+            {
+                return NotFound();
+            }
+
+            existingVisit.startDate = entityDto.startDate;
+            existingVisit.workingTime = workinTime;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!isVisitPresent)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(201);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteVisit(int id){
+            var existingVisit = await _context.Visits.FindAsync(id);
+            var isVisitPresent = existingVisit == null;
+            if (isVisitPresent)
+            {
+                return NotFound();
+            }
+
+            _context.Visits.Remove(existingVisit);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(201);
 
         }
     }
