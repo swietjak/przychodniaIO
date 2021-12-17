@@ -7,15 +7,15 @@ namespace Backend.Extensions
 {
     public static class VisitExtensions
     {
-        public static GetVisitDto AsGetVisitDto(this Visit item, Patient patient, Receptionist receptionist, Medic doctor)
+        public static GetVisitDto AsGetVisitDto(this Visit item)
         {
             return new GetVisitDto
             {
                 id = item.id,
                 description = item.description,
-                doctor = doctor.AsGetEntityDto(),
-                patient = patient.AsGetEntityDto(),
-                receptionist = receptionist.AsGetEntityDto(),
+                doctor = item.workingTime == null ? null : item.workingTime.medic.AsGetEntityDto(),
+                patient = item.patient == null ? null : item.patient.AsGetEntityDto(),
+                receptionist = item.receptionist == null ? null : item.receptionist.AsGetEntityDto(),
                 startDate = item.startDate
             };
         }

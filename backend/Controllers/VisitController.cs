@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Context;
 using Backend.Dtos;
+using Backend.Entities;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,32 +23,16 @@ namespace Backend.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<GetVisitDto>> Get()
         {
+            var list = _context.Visits
+            .Include(visit => visit.patient)
+            .Include(visit => visit.receptionist)
+            .Include(visit => visit.workingTime)
+            .Include(visit => visit.workingTime.clinic)
+            .Include(visit => visit.workingTime.medic)
+            .Select(visit => visit.AsGetVisitDto())
+            .ToList();
 
-            var list = from v in _context.Visits
-                       join p in _context.Patients on v.patient.id equals p.id
-                       join w in _context.WorkingTimes on v.workingTime.id equals w.id
-                       join r in _context.Receptionists on v.receptionist.id equals r.id
-                       join m in _context.Medics on w.medic.id equals m.id
-                       select new
-                       {
-                           id = v.id,
-                           description = v.description,
-                           startDate = v.startDate,
-                           doctor = m.AsGetEntityDto(),
-                           patient = p.AsGetEntityDto(),
-                           receptionist = r.AsGetEntityDto()
-                       };
-
-            var res = list.Select(elem => new GetVisitDto
-            {
-                id = elem.id,
-                description = elem.description,
-                startDate = elem.startDate,
-                doctor = elem.doctor,
-                patient = elem.patient,
-                receptionist = elem.receptionist
-            }).ToList();
-            return res;
+            return list;
         }
 
         [HttpPost]
@@ -72,7 +57,8 @@ namespace Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateVisit(int id, UpdateVisitDto entityDto){
+        public async Task<ActionResult> UpdateVisit(int id, UpdateVisitDto entityDto)
+        {
 
             var existingVisit = await _context.Visits.FindAsync(id);
             var workinTime = _context.WorkingTimes.FirstOrDefault(x => x.id == entityDto.workingTimeId);
@@ -98,7 +84,8 @@ namespace Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteVisit(int id){
+        public async Task<ActionResult> DeleteVisit(int id)
+        {
             var existingVisit = await _context.Visits.FindAsync(id);
             var isVisitPresent = existingVisit == null;
             if (isVisitPresent)
