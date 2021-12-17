@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks; //
 using Backend.Context;
 using Backend.Dtos;
 using Backend.Entities;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore; //
 
 namespace Backend.Controllers
 {
@@ -51,6 +53,50 @@ namespace Backend.Controllers
                 return StatusCode(400, "Failed");
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAvailability(int id, UpdateAvailabilityDto entityDto) 
+        {
+
+            var existingAvailability = await _context.Availabilities.FindAsync(id);
+            var medicsList = _context.Medics.FirstOrDefault(x => x.id == entityDto.medicId);
+            var isAvailabilityPresent = existingAvailability == null;
+            if(isAvailabilityPresent) 
+            {
+                return NotFound();
+            }
+
+            existingAvailability.startDate = entityDto.startDate;
+            existingAvailability.endDate = entityDto.endDate;
+            existingAvailability.medic = medicsList;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!isAvailabilityPresent)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(201);  
+        }
  
+       [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAvailability(int id)
+        {
+            var existingAvailability = await _context.Availabilities.FindAsync(id);
+            var isAvailabilityPresent = existingAvailability == null;
+            if(isAvailabilityPresent) 
+            {
+                return NotFound();
+            }
+
+            _context.Availabilities.Remove(existingAvailability);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(201);
+        }
+
     }
 }
