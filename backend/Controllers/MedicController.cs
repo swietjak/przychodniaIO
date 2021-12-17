@@ -23,7 +23,13 @@ namespace Backend.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<GetMedicDto>> Get()
         {
-            var list = _context.Medics.Select(medic => medic.AsGetMedicDto()).ToList();
+
+            var list = _context.Medics
+            .Include(medic => medic.clinics)
+            .Include(medic => medic.specializations)
+            .Select(medic => medic.AsGetMedicDto())
+            .ToList();
+
             return list;
         }
 
@@ -34,21 +40,22 @@ namespace Backend.Controllers
             var clinicsList = _context.Clinics.Where(clinic => value.clinic_ids.Any(id => id == clinic.id)).ToList();
 
             _context.Medics.Add(value.AsMedic(specializationsList, clinicsList));
-            
 
-            try 
+
+            try
             {
                 _context.SaveChanges();
                 return StatusCode(201, value);
-             }
-             catch
+            }
+            catch
             {
                 return StatusCode(400, "Failed");
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateMedic(int id, UpdateMedicDto value){
+        public async Task<ActionResult> UpdateMedic(int id, UpdateMedicDto value)
+        {
 
             var existingMedic = await _context.Medics.FindAsync(id);
             var specializationsList = _context.Specializations.Where(specialization => value.specialization_ids.Any(id => id == specialization.id)).ToList();
@@ -59,7 +66,7 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
-            existingMedic.medicRole = (MedicRole)System.Enum.Parse(typeof(MedicRole),value.role);
+            existingMedic.medicRole = (MedicRole)System.Enum.Parse(typeof(MedicRole), value.role);
             existingMedic.specializations = specializationsList;
             existingMedic.clinics = clinicsList;
 
@@ -76,7 +83,8 @@ namespace Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteMedic(int id){
+        public async Task<ActionResult> DeleteMedic(int id)
+        {
             var existingMedic = await _context.Medics.FindAsync(id);
             var isMedicPresent = existingMedic == null;
             if (isMedicPresent)

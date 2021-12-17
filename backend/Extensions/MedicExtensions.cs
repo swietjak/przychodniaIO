@@ -24,9 +24,26 @@ namespace Backend.Extensions
             };
         }
 
+        public static GetMedicDto AsGetMedicDto(this Medic item, IEnumerable<GetEntityDto> clinics, IEnumerable<GetEntityDto> specilizations)
+        {
+            System.Console.WriteLine(item.medicRole.ToString("G"));
+            return new GetMedicDto
+            {
+                id = item.id,
+                name = item.name,
+                address = item.address,
+                clinics = clinics,
+                mail = item.mail,
+                PESEL = item.PESEL,
+                phone = item.phone,
+                specializations = specilizations,
+                medicRole = item.medicRole.ToString("G")
+            };
+        }
+
         public static GetMedicDto AsGetMedicDto(this Medic item)
         {
-
+            //System.Console.WriteLine(item.medicRole.ToString("G"));
             return new GetMedicDto
             {
                 id = item.id,
