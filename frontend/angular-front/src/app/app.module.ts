@@ -13,6 +13,7 @@ import { ManagerComponent } from './manager/manager.component';
 import { LoginComponent } from './login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button'; 
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,21 @@ import {MatButtonModule} from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule.forRoot([
+      {
+        path: '',
+        component: ClientComponent
+      },
+      {
+        path: 'login',
+        component: LoginComponent
+      },
+      {
+        path: 'manager',
+        component: ManagerComponent
+      }
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]
