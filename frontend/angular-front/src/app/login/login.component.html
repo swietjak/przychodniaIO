@@ -1,19 +1,21 @@
 
 
 
-    <div class="login">
-        <h1>Zaloguj się</h1>
-        <form method="post" action="">
-          <p><input type="text" name="login" value="" placeholder="Username"></p>
-          <p><input type="password" name="password" value="" placeholder="Password"></p>
-          <p class="remember_me">
-          </p>
-          <p (click)="login.emit()" class="submit"><input type="submit" name="commit" value="Login"></p>
-        </form>
-      </div>
-      
+  
     
+      <mat-form-field *ngIf=1 appearance="fill">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field> 
+
+
+
+      <!-- <mat-chip-list aria-label="Fish selection">
+        <mat-chip>16:00</mat-chip>
+        <mat-chip>17:00</mat-chip>
+        <mat-chip color="primary" selected>Primary fish</mat-chip>
+        <mat-chip color="accent" selected>Accent fish</mat-chip>
+      </mat-chip-list> -->
       
-
-
-

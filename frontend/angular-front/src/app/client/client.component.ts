@@ -13,10 +13,11 @@ export class ClientComponent implements OnInit {
   ngOnInit(): void {
   }
   title = 'pacjent'
+  show =false;
   logged() {
   
-    alert('client logged')
-    
+   this.show = true;
+   
   }
 
 }

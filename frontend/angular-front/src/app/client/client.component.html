@@ -1,2 +1,12 @@
 <p>Logowanie na konto pacjenta</p>
-<app-login (login)=logged()></app-login>
+<div  class="login">
+    <h1>Zaloguj się</h1>
+    <form method="post" action="">
+      <p><input type="text" name="login" value="" placeholder="Username"></p>
+      <p><input type="password" name="password" value="" placeholder="Password"></p>
+      <p class="remember_me">
+      </p>
+      <p  (login)=logged() routerLink="/login" routerLinkActive="active" class="submit"><input type="submit" name="commit" value="Login"></p>
+    </form>
+  </div>
+  
