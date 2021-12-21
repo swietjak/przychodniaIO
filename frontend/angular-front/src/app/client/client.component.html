@@ -1,3 +1,4 @@
+<div style="width:500px; margin:0 auto;">
 <app-login *ngIf="!isLogged" (login)=logged()></app-login>
 <ng-container *ngIf="isLogged">
     <mat-form-field appearance="fill">
@@ -22,3 +23,4 @@
         <button *ngIf="!visit.busy" color="primary" mat-raised-button>Umów wizyte</button>
     </div>
 </ng-container>
+</div>
