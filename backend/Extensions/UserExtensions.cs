@@ -27,5 +27,33 @@ namespace Backend.Extensions
                 name = item.name,
             };
         }
+
+        public static User AsUser(this CreateUserDto item)
+        {
+            return new User
+            {
+                address = item.address,
+                id = 0,
+                mail = item.mail,
+                name = item.name,
+                password = item.password,
+                PESEL = item.PESEL,
+                phone = item.phone
+            };
+        }
+
+        public static Manager AsManager(this CreateUserDto item)
+        {
+            return new Manager
+            {
+                address = item.address,
+                id = 0,
+                mail = item.mail,
+                name = item.name,
+                password = item.password,
+                PESEL = item.PESEL,
+                phone = item.phone
+            };
+        }
     }
 }

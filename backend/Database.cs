@@ -20,5 +20,6 @@ namespace Backend.Context
         public DbSet<Visit> Visits { get; set; }
         public DbSet<WorkingTime> WorkingTimes { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
+        public DbSet<Manager> Managers { get; set; }
     }
 }
