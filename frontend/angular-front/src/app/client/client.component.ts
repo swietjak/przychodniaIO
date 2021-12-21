@@ -8,6 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientComponent implements OnInit {
 
+  isLogged = false;
+  visits = [
+    {
+      time: "8:00",
+      busy: false,
+    },
+    {
+      time: "9:00",
+      busy: true,
+    },
+    {
+      time: "8:00",
+      busy: false,
+    },
+    {
+      time: "8:00",
+      busy: false,
+    }
+  ];
+
+  doctors = ['1111', '2222'];
+
   constructor() { }
 
   ngOnInit(): void {
@@ -15,7 +37,7 @@ export class ClientComponent implements OnInit {
 
   logged() {
     console.log('client logged')
-    
+    this.isLogged = true;
   }
 
 }
