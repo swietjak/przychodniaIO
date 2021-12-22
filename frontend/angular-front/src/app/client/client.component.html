@@ -1,6 +1,11 @@
+
+<div style="width:500px; margin:0 auto;" >
+  
 <app-login *ngIf="!isLogged" (login)=logged()></app-login>
-<ng-container *ngIf="isLogged">
-    <mat-form-field appearance="fill">
+<ng-container *ngIf="isLogged" >
+  <div class="container">
+    <p>Wybierz termin wizyty</p>
+    <mat-form-field appearance="fill" >
         <mat-label>Lekarz</mat-label>
         <mat-select>
           <mat-option *ngFor="let doctor of doctors" [value]="doctor">
@@ -19,6 +24,8 @@
     <div *ngFor="let visit of visits">
         {{visit.time}}
         <span *ngIf="visit.busy">Wizyta</span>
-        <button *ngIf="!visit.busy" color="primary" mat-raised-button>Umów wizyte</button>
+        <button *ngIf="!visit.busy" color="primary"  mat-raised-button>Umów wizyte</button>
     </div>
+  </div>
 </ng-container>
+</div>

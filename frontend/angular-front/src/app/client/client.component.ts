@@ -1,6 +1,9 @@
 import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 
+
+
+
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
@@ -19,16 +22,19 @@ export class ClientComponent implements OnInit {
       busy: true,
     },
     {
-      time: "8:00",
+      time: "10:00",
       busy: false,
     },
     {
-      time: "8:00",
+      time: "11:00",
       busy: false,
     }
   ];
 
-  doctors = ['1111', '2222'];
+  alertShow(){
+    alert("Wizyta została umówiona")
+  }
+  doctors = ['Michał Kalke', 'Halina Frąckowiak'];
 
   constructor() { }
 
