@@ -28,7 +28,7 @@ export class ClientComponent implements OnInit {
     }
   ];
 
-  doctors = ['1111', '2222'];
+  doctors = ['Michał Kalke', 'Halina Frąckowiak'];
 
   constructor() { }
 
