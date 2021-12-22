@@ -12,7 +12,30 @@ export class ManagerComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isLogged = false;
+  visits = [
+    {
+      time: "8:00",
+      busy: false,
+    },
+    {
+      time: "9:00",
+      busy: true,
+    },
+    {
+      time: "10:00",
+      busy: false,
+    },
+    {
+      time: "11:00",
+      busy: false,
+    }
+  ];
+
+  doctors = ['Michał Kalke', 'Halina Frąckowiak'];
+
   logged() {
-    console.log('manager logged')
+    console.log('client logged')
+    this.isLogged = true;
   }
 }

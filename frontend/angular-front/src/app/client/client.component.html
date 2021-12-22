@@ -1,3 +1,4 @@
+
 <div style="width:500px; margin:0 auto;" >
   
 <app-login *ngIf="!isLogged" (login)=logged()></app-login>
@@ -23,7 +24,7 @@
     <div *ngFor="let visit of visits">
         {{visit.time}}
         <span *ngIf="visit.busy">Wizyta</span>
-        <button *ngIf="!visit.busy" color="primary" mat-raised-button>Umów wizyte</button>
+        <button *ngIf="!visit.busy" color="primary"  mat-raised-button>Umów wizyte</button>
     </div>
   </div>
 </ng-container>
