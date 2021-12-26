@@ -39,6 +39,24 @@ namespace Backend.Controllers
 
         }
 
+        [HttpGet("entieties")]
+        public ActionResult<IEnumerable<GetEntityDto>> GetEntities()
+        {
+            try
+            {
+                System.Console.WriteLine(_context.Clinics.ToList());
+                var list = _context.Clinics.Select(clinic => clinic.AsGetEntityDto()).ToList();
+                System.Console.WriteLine(list);
+
+                return list;
+            }
+            catch
+            {
+                return NotFound();
+            }
+
+        }
+
         [HttpGet("{id}")]
         public GetClinicDto Get(int id)
         {
@@ -55,20 +73,21 @@ namespace Backend.Controllers
             Clinic clinic = value.AsClinic(specialization);
             _context.Clinics.Add(clinic);
 
-           
-            try 
+
+            try
             {
                 _context.SaveChanges();
                 return StatusCode(201, clinic.id);
             }
-          catch
+            catch
             {
-              return StatusCode(400, "Failed");
+                return StatusCode(400, "Failed");
             }
         }
-        
+
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateClinic(int id, UpdateClinicDto entityDto){
+        public async Task<ActionResult> UpdateClinic(int id, UpdateClinicDto entityDto)
+        {
 
             var existingClinic = await _context.Clinics.FindAsync(id);
             var specialization = _context.Specializations.FirstOrDefault(x => x.id == entityDto.specialization_id);
@@ -98,7 +117,8 @@ namespace Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteClinic(int id){
+        public async Task<ActionResult> DeleteClinic(int id)
+        {
             var existingClinic = await _context.Clinics.FindAsync(id);
             var isClinicPresent = existingClinic == null;
             if (isClinicPresent)

@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Context;
 using Backend.Dtos;
+using Backend.Entities;
 using Backend.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,7 @@ namespace Backend.Controllers
     public class WorkingTimeController : Controller
     {
         private readonly HospitalContext _context;
-
+        private const int visitLength = 20;
         public WorkingTimeController(HospitalContext context)
         {
             _context = context;
@@ -49,6 +51,11 @@ namespace Backend.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] CreateWorkingTimeDto value)
         {
+            if (value.endDate < value.startDate)
+            {
+                return StatusCode(400, "endDate can't be before startDate");
+            }
+
             var clinic = _context.Clinics.FirstOrDefault(clinic => clinic.id == value.clinicId);
             if (clinic == null)
             {
@@ -61,7 +68,26 @@ namespace Backend.Controllers
                 return StatusCode(400, "Wrong medic id");
             }
 
-            _context.WorkingTimes.Add(value.AsWorkingTime(medic, clinic));
+            var workingTime = value.AsWorkingTime(medic, clinic);
+            _context.WorkingTimes.Add(workingTime);
+            _context.SaveChanges();
+
+            int numberOfVisits = (int)Math.Round((value.endDate - value.startDate).TotalMinutes / visitLength);
+
+            var newVisits = Enumerable.Range(0, numberOfVisits).Select(time => new Visit
+            {
+                id = 0,
+                description = null,
+                patient = null,
+                receptionist = null,
+                startDate = value.startDate.AddMinutes(time * visitLength),
+                workingTime = workingTime
+            });
+
+            foreach (var visit in newVisits)
+            {
+                _context.Visits.Add(visit);
+            }
             _context.SaveChanges();
 
             return StatusCode(201);

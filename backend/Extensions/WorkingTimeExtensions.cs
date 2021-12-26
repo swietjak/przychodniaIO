@@ -15,7 +15,6 @@ namespace Backend.Extensions
                 medic = medic,
                 endDate = item.endDate,
                 startDate = item.startDate,
-                id = 0
             };
         }
     }
