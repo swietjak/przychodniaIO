@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
+    public class GetPatientVisits
+    {
+
+    }
     [Route("api/[controller]")]
     public class VisitController : Controller
     {
@@ -18,6 +23,17 @@ namespace Backend.Controllers
         public VisitController(HospitalContext context)
         {
             _context = context;
+        }
+
+        private bool ValidateVisit(Visit visit, int? clinicId, int? medicId)
+        {
+            if (clinicId == null && medicId == null) return true;
+
+            if (clinicId == visit.workingTime.clinic.id) return true;
+
+            if (medicId == visit.workingTime.medic.id) return true;
+
+            return false;
         }
 
         [HttpGet]
@@ -29,6 +45,38 @@ namespace Backend.Controllers
             .Include(visit => visit.workingTime)
             .Include(visit => visit.workingTime.clinic)
             .Include(visit => visit.workingTime.medic)
+            .Select(visit => visit.AsGetVisitDto())
+            .ToList();
+
+            return list;
+        }
+
+        [HttpGet("{clinicId}")]
+        public ActionResult<IEnumerable<GetVisitDto>> GetClinicEmptyVisits(int clinicId, DateTime day, int? medicId)
+        {
+            var list = _context.Visits
+            .Include(visit => visit.patient)
+            .Include(visit => visit.receptionist)
+            .Include(visit => visit.workingTime)
+            .Include(visit => visit.workingTime.clinic)
+            .Include(visit => visit.workingTime.medic)
+            .Where(visit => clinicId == visit.workingTime.clinic.id || medicId == visit.workingTime.medic.id || day.Date == visit.startDate.Date && visit.patient == null)
+            .Select(visit => visit.AsGetVisitDto())
+            .ToList();
+
+            return list;
+        }
+
+        [HttpGet("{patientId}/patient-visits")]
+        public ActionResult<IEnumerable<GetVisitDto>> GetPatientVisits(int patientId)
+        {
+            var list = _context.Visits
+            .Include(visit => visit.patient)
+            .Include(visit => visit.receptionist)
+            .Include(visit => visit.workingTime)
+            .Include(visit => visit.workingTime.clinic)
+            .Include(visit => visit.workingTime.medic)
+            .Where(visit => visit.patient.id == patientId)
             .Select(visit => visit.AsGetVisitDto())
             .ToList();
 
@@ -71,6 +119,30 @@ namespace Backend.Controllers
             existingVisit.startDate = entityDto.startDate;
             existingVisit.workingTime = workinTime;
 
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!isVisitPresent)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(201);
+        }
+
+        [HttpPut("{visitId}/book")]
+        public async Task<ActionResult> BookVisit(int visitId, int patientId)
+        {
+
+            var existingVisit = await _context.Visits.FindAsync(visitId);
+            var patient = await _context.Patients.FindAsync(patientId);
+            var isVisitPresent = existingVisit == null;
+            if (isVisitPresent || patient == null)
+            {
+                return NotFound();
+            }
+            existingVisit.patient = patient;
             try
             {
                 await _context.SaveChangesAsync();

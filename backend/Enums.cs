@@ -4,4 +4,8 @@ namespace Backend
     {
         Doctor, Nurse
     }
+    public enum AppRole
+    {
+        Medic, Patient, Manager, Nurse
+    }
 }

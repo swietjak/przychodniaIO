@@ -21,7 +21,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginDto value)
+        public IActionResult Login([FromBody] LoginQuery value)
         {
             var medic = _context.Medics.FirstOrDefault(medic => medic.mail.Equals(value.email));
             if (medic != null)
@@ -30,7 +30,7 @@ namespace Backend.Controllers
                 {
                     return StatusCode(400, "Bad password");
                 }
-                return StatusCode(201, "MEDIC " + medic.medicRole.ToString("G"));
+                return StatusCode(201, new LoginDto { id = medic.id, role = AppRole.Medic.ToString("G") });
             }
 
             var patient = _context.Patients.FirstOrDefault(patient => patient.mail.Equals(value.email));
@@ -40,7 +40,7 @@ namespace Backend.Controllers
                 {
                     return StatusCode(400, "Bad password");
                 }
-                return StatusCode(201, "PATIENT");
+                return StatusCode(201, new LoginDto { id = patient.id, role = AppRole.Medic.ToString("G") });
             }
 
             var manager = _context.Managers.FirstOrDefault(manager => manager.mail.Equals(value.email));
@@ -50,7 +50,7 @@ namespace Backend.Controllers
                 {
                     return StatusCode(400, "Bad password");
                 }
-                return StatusCode(201, "MANAGER");
+                return StatusCode(201, manager);
             }
 
             var receptionist = _context.Receptionists.FirstOrDefault(receptionist => receptionist.mail.Equals(value.email));

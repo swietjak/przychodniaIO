@@ -33,6 +33,20 @@ namespace Backend.Controllers
             return list;
         }
 
+        [HttpGet("{clinicId}/assigned")]
+        public ActionResult<IEnumerable<GetEntityDto>> GetByClinicId(int clinicId)
+        {
+
+            var list = _context.Medics
+            .Include(medic => medic.clinics)
+            .Include(medic => medic.specializations)
+            .Where(medic => medic.clinics.Any(c => c.id == clinicId))
+            .Select(medic => medic.AsGetEntityDto())
+            .ToList();
+
+            return list;
+        }
+
         [HttpPost]
         public IActionResult CreateMedic([FromBody] CreateMedicDto value)
         {
