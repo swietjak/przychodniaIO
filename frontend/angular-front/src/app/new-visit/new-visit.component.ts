@@ -1,16 +1,15 @@
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 
+
+
+
 @Component({
-  selector: 'app-manager',
-  templateUrl: './manager.component.html',
-  styleUrls: ['./manager.component.css']
+  selector: 'app-new-visit',
+  templateUrl: './new-visit.component.html',
+  styleUrls: ['./new-visit.component.css']
 })
-export class ManagerComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class NewVisitComponent implements OnInit {
 
   isLogged = false;
   visits = [
@@ -32,10 +31,19 @@ export class ManagerComponent implements OnInit {
     }
   ];
 
+  alertShow(){
+    alert("Wizyta została umówiona")
+  }
   doctors = ['Michał Kalke', 'Halina Frąckowiak'];
 
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
   logged() {
-    console.log('client logged')
+    console.log('new-visit logged')
     this.isLogged = true;
   }
+
 }

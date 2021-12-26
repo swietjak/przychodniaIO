@@ -2,9 +2,12 @@
   <mat-toolbar color="primary">
     <span>Przychodnia</span>
   </mat-toolbar>
-  <mat-toolbar>
-    <button mat-button routerLink="/client" routerLinkActive="active">Pacjent</button>
-    <button mat-button routerLink="/manager" routerLinkActive="active">Manager</button>
+  <mat-toolbar *ngIf="dataService.isLogged">
+    <button mat-button routerLink="/new-visit" routerLinkActive="active">Umów wizytę</button>
+    <button mat-button routerLink="/visits" routerLinkActive="active">Historia wizyt</button>
+  </mat-toolbar>
+  <mat-toolbar *ngIf="!dataService.isLogged">
+    Logowanie
   </mat-toolbar>
 </p>
 

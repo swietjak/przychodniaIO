@@ -8,8 +8,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
-import { ClientComponent } from './client/client.component';
-import { ManagerComponent } from './manager/manager.component';
+import { NewVisitComponent } from './new-visit/new-visit.component';
+import { VisitsComponent } from './visits/visits.component';
 import { LoginComponent } from './login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,8 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
-    ClientComponent,
-    ManagerComponent,
+    NewVisitComponent,
+    VisitsComponent,
     LoginComponent
   ],
   imports: [
