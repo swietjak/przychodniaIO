@@ -1,27 +1,32 @@
-button {
-    margin: 10px;
+.container {
+  margin: 100px auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 50px;
+  border: solid 1px #555;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 3px 4px 5px 0px rgba(0, 0, 0, 0.38);
+  width: 80%;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
 }
 
-.container {
-   
-    margin-top: 70px;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding:50px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border: solid 1px #555;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 3px 4px 5px 0px rgba(0, 0, 0, 0.38);
-    
-    height: 300px;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-  }
-  p{
-    font-size: 30px;
-    font-weight: 300;
-     ;
-    padding-top:0;
-  }
+p {
+  font-size: 30px;
+  font-weight: 300;;
+  padding-top: 0;
+}
+
+.mat-form-field {
+  margin-right: 16px;
+}
+
+.visits-table {
+  width: 300px;
+  margin: 20px auto;
+}
+
+th.mat-header-cell {
+  text-align: center !important;
+}

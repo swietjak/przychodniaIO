@@ -1,8 +1,7 @@
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
-
-
-
+import { FormControl } from '@angular/forms'
+import { DataService } from '../data.service'
+import { MatSnackBar } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-new-visit',
@@ -11,39 +10,58 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewVisitComponent implements OnInit {
 
-  isLogged = false;
-  visits = [
+  specialization = '';
+  medic = '';
+  date = new FormControl(new Date());
+
+  medics = [{
+    id: '1',
+    name: 'Michał Kalke'
+  }, {
+    id: '2',
+    name: 'Halina Frąckowiak'
+  }];
+  specializations = [
     {
-      time: "8:00",
-      busy: false,
+      id: '1',
+      name: 'Specjalizacja 1'
     },
     {
-      time: "9:00",
-      busy: true,
+      id: '2',
+      name: 'Specjalizacja 2'
     },
     {
-      time: "10:00",
-      busy: false,
-    },
-    {
-      time: "11:00",
-      busy: false,
+      id: '3',
+      name: 'Specjalizacja 3'
     }
-  ];
+  ]
+  visits = [];
+  displayedColumns: string[] = ['time', 'availability'];
 
-  alertShow(){
-    alert("Wizyta została umówiona")
+  constructor(private dataService: DataService, private snackBar: MatSnackBar) {
   }
-  doctors = ['Michał Kalke', 'Halina Frąckowiak'];
-
-  constructor() { }
 
   ngOnInit(): void {
   }
 
-  logged() {
-    console.log('new-visit logged')
-    this.isLogged = true;
+  search() {
+    console.log('search')
+    this.dataService.searchVisits({ date: this.date.value, medicId: this.medic })
+      .subscribe(visits => {
+        this.visits = visits;
+      })
   }
 
+  newVisit(element: any) {
+    console.log(element)
+    this.dataService.newVisit({
+      startDate: element.startDate,
+      endDate: element.endDate,
+      patientId: '2', // TODO
+      medicId: '2', // TODO
+    }).subscribe(() => {
+      this.search();
+      this.snackBar.open('Wizyta została umówiona');
+    })
+  }
 }
