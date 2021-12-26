@@ -16,7 +16,7 @@ export class DataService {
     return this.logged;
   }
 
-  login(): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     // TODO LOGIN
     this.logged = true;
     return of({});

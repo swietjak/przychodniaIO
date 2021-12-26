@@ -9,6 +9,9 @@ import { Router } from '@angular/router'
 })
 export class LoginComponent implements OnInit {
 
+  email = '';
+  password = '';
+
   constructor(public dataService: DataService, private router: Router) {
   }
 
@@ -16,8 +19,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    // TODO logowanie
-    this.dataService.login()
+    this.dataService.login(this.email, this.password)
       .subscribe(() => {
         console.log('sub')
         this.router.navigateByUrl('new-visit');
