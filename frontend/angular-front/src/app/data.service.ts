@@ -45,7 +45,7 @@ export class DataService {
   }
 
   newVisit(data: any): Observable<any> {
-    return this.http.post(`https://localhost:5001/api/Visit/${data.id}/book`, data);
+    return this.http.put(`https://localhost:5001/api/Visit/${data.id}/book`, data);
   }
 }
 
