@@ -60,7 +60,7 @@ namespace Backend.Controllers
             .Include(visit => visit.workingTime)
             .Include(visit => visit.workingTime.clinic)
             .Include(visit => visit.workingTime.medic)
-            .Where(visit => clinicId == visit.workingTime.clinic.id || medicId == visit.workingTime.medic.id || day.Date == visit.startDate.Date && visit.patient == null)
+            .Where(visit => clinicId == visit.workingTime.clinic.id && (medicId == null || medicId == visit.workingTime.medic.id) && day.Date == visit.startDate.Date && visit.patient == null)
             .Select(visit => visit.AsGetVisitDto())
             .ToList();
 
