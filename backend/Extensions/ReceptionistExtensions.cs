@@ -31,6 +31,7 @@ namespace Backend.Extensions
                 mail = item.mail,
                 phone = item.phone,
                 PESEL = item.PESEL,
+                password = item.password,
                 clinic = clinic
             };
         }

@@ -2,19 +2,19 @@
   <p>Wybierz termin wizyty</p>
   <div class="filters">
     <mat-form-field appearance="fill">
-      <mat-label>Lekarz</mat-label>
-      <mat-select [(value)]="medic">
-        <mat-option *ngFor="let medic of medics" [value]="medic.id">
-          {{medic.name}}
+      <mat-label>Specjalizacja</mat-label>
+      <mat-select [(value)]="specialization">
+        <mat-option *ngFor="let specialization of specializations" [value]="specialization.id">
+          {{specialization.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Specjalizacja</mat-label>
-      <mat-select [(value)]="specialization">
-        <mat-option *ngFor="let specialization of specializations" [value]="specialization.id">
-          {{specialization.name}}
+      <mat-label>Lekarz</mat-label>
+      <mat-select [(value)]="medic">
+        <mat-option *ngFor="let medic of medics" [value]="medic.id">
+          {{medic.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -34,16 +34,16 @@
   <table *ngIf="visits.length" mat-table [dataSource]="visits" class="mat-elevation-z8 visits-table">
     <ng-container matColumnDef="time">
       <th mat-header-cell *matHeaderCellDef> Czas</th>
-      <td mat-cell *matCellDef="let element"> {{element.startDate}} - {{element.endDate}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.startDate | date: 'dd.MM.yy HH:mm'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="availability">
       <th mat-header-cell *matHeaderCellDef> Dostępność</th>
       <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="element.availability">
+        <ng-container *ngIf="!element.patient">
           <button color="primary" mat-button (click)="newVisit(element)">Rezerwuj</button>
         </ng-container>
-        <ng-container *ngIf="!element.availability">
+        <ng-container *ngIf="element.patient">
           Termin zajęty
         </ng-container>
       </td>

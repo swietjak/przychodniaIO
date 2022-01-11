@@ -14,34 +14,24 @@ export class NewVisitComponent implements OnInit {
   medic = '';
   date = new FormControl(new Date());
 
-  medics = [{
-    id: '1',
-    name: 'Michał Kalke'
-  }, {
-    id: '2',
-    name: 'Halina Frąckowiak'
-  }];
-  specializations = [
-    {
-      id: '1',
-      name: 'Specjalizacja 1'
-    },
-    {
-      id: '2',
-      name: 'Specjalizacja 2'
-    },
-    {
-      id: '3',
-      name: 'Specjalizacja 3'
-    }
-  ]
+  medics: any[] = [];
+  specializations: any[] = []
   visits = [];
   displayedColumns: string[] = ['time', 'availability'];
 
   constructor(private dataService: DataService, private snackBar: MatSnackBar) {
+
   }
 
   ngOnInit(): void {
+    this.dataService.getMedics().subscribe(res => {
+      console.log(res);
+      this.medics = res;
+    });
+    this.dataService.getSpecializations().subscribe(res => {
+      console.log(res);
+      this.specializations = res;
+    });
   }
 
   search() {
@@ -55,10 +45,10 @@ export class NewVisitComponent implements OnInit {
   newVisit(element: any) {
     console.log(element)
     this.dataService.newVisit({
+      id: element.id,
       startDate: element.startDate,
-      endDate: element.endDate,
-      patientId: '2', // TODO
-      medicId: '2', // TODO
+      patientId: '1', // TODO
+      medicId: '1', // TODO
     }).subscribe(() => {
       this.search();
       this.snackBar.open('Wizyta została umówiona');
