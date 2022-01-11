@@ -16,10 +16,14 @@ export class DataService {
     return this.logged;
   }
 
+  setLogged() {
+    this.logged = true;
+  }
+
   login(email: string, password: string): Observable<any> {
     // TODO LOGIN
-    this.logged = true;
-    return of({});
+    //kazdy - return of({});
+    return this.http.post(`https://localhost:5001/api/Login`, { email, password });
   }
 
   getVisits(): Observable<any> {

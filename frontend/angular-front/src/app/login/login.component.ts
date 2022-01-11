@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
     this.dataService.login(this.email, this.password)
       .subscribe(() => {
         console.log('sub')
+        this.dataService.setLogged();
         this.router.navigateByUrl('new-visit');
       });
   }
