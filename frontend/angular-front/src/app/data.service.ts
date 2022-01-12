@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs'
-import { HttpClient } from '@angular/common/http'
+import { Observable, of } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
-
   private logged = false;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   get isLogged() {
     return this.logged;
@@ -23,7 +21,10 @@ export class DataService {
   login(email: string, password: string): Observable<any> {
     // TODO LOGIN
     //kazdy - return of({});
-    return this.http.post(`https://localhost:5001/api/Login`, { email, password });
+    return this.http.post(`https://localhost:5001/api/Login`, {
+      email,
+      password,
+    });
   }
 
   getVisits(): Observable<any> {
@@ -38,18 +39,32 @@ export class DataService {
     return this.http.get('https://localhost:5001/api/Medic');
   }
 
-  searchVisits(data: SearchVisitRequest): Observable<any> {
-    console.log(data);
+  searchVisits({ clinicId, ...params }: SearchVisitRequest): Observable<any> {
+    console.log(params);
+    const httpParams = new HttpParams({
+      fromObject: {
+        medicId: params.medicId,
+        date: params.date.toISOString(),
+      },
+    });
     //return this.http.post('/backend-url', data);
-    return this.http.get('https://localhost:5001/api/Visit/1');
+    return this.http.get(`https://localhost:5001/api/Visit/${clinicId}`, {
+      params: httpParams,
+    });
   }
 
-  newVisit(data: any): Observable<any> {
-    return this.http.put(`https://localhost:5001/api/Visit/${data.id}/book`, data);
+  newVisit({ id, ...data }: BookVisitRequest): Observable<any> {
+    return this.http.put(`https://localhost:5001/api/Visit/${id}/book`, data);
   }
 }
 
 interface SearchVisitRequest {
   medicId: string;
-  date: string;
+  date: Date;
+  clinicId: string;
+}
+
+interface BookVisitRequest {
+  id: string;
+  patientId: number;
 }
